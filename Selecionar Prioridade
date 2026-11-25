@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+
+struct Cliente{
+	
+	char nome[50];
+	int idade;
+	char prioridade[50];
+};
+
+int main(){
+	
+	int prioridadeMenu;
+	
+	struct Cliente cliente;
+	
+	printf("Selecione sua prioridade: \n");
+	printf("1- Normal\n");
+	printf("2- Prioridade\n");
+	printf("3 - Urgente\n");
+	scanf("%d", &prioridadeMenu);
+	
+	switch(prioridadeMenu){
+		
+		case 1:
+			strcpy(cliente.prioridade, "Normal");
+			break;
+			
+		case 2:
+			strcpy(cliente.prioridade, "Prioridade");
+			break;
+			
+		case 3:
+			strcpy(cliente.prioridade, "Urgente");
+			break;
+	}
+	
+	printf("Prioridade: %s\n", cliente.prioridade);
+	
+	
+	return 0;
+}
