@@ -6,12 +6,12 @@ struct Cliente{
 	
 	char nome[50];
 	int idade;
-	char prioridade[50];
+	int prioridade;
 };
 
 int main(){
 	
-	int prioridadeMenu;
+	const char *prioridade[] = {"","Normal","Prioridade","Urgente"};
 	
 	struct Cliente cliente;
 	
@@ -19,25 +19,8 @@ int main(){
 	printf("1- Normal\n");
 	printf("2- Prioridade\n");
 	printf("3 - Urgente\n");
-	scanf("%d", &prioridadeMenu);
+	scanf("%d", &cliente.prioridade);
 	
-	switch(prioridadeMenu){
-		
-		case 1:
-			strcpy(cliente.prioridade, "Normal");
-			break;
-			
-		case 2:
-			strcpy(cliente.prioridade, "Prioridade");
-			break;
-			
-		case 3:
-			strcpy(cliente.prioridade, "Urgente");
-			break;
-	}
-	
-	printf("Prioridade: %s\n", cliente.prioridade);
-	
-	
+	printf("Prioridade: %s\n", prioridade[cliente.prioridade]);
 	return 0;
 }
