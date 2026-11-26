@@ -9,6 +9,14 @@ struct Cliente{
 	int prioridade;
 };
 
+void registrarChamado(struct Cliente *p){
+	
+	printf("Digite seu nome: \n");
+	scanf(" %49[^\n]", &p->nome);
+	printf("Digite sua idade: \n");
+	scanf("%d", p->idade);
+}
+
 int main(){
 	
 	const char *prioridade[] = {"","Normal","Prioridade","Urgente"};
@@ -20,6 +28,8 @@ int main(){
 	printf("2- Prioridade\n");
 	printf("3 - Urgente\n");
 	scanf("%d", &cliente.prioridade);
+	
+	registrarChamado(&cliente);
 	
 	printf("Prioridade: %s\n", prioridade[cliente.prioridade]);
 	return 0;
