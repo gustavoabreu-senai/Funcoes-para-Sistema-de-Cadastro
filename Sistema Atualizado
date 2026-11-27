@@ -1,0 +1,260 @@
+#include <stdio.h>
+#include <locale.h>
+
+#define MAX 100
+#define TAM_NOME 50
+#define TOTAL 5
+
+typedef struct {
+    int codigo;
+    char nome[TAM_NOME];
+    int memoria;
+} Equipamento;
+
+int cadastroEquipamentos(Equipamento equipamentos[], int quantidade) {
+
+    if (quantidade >= TOTAL) {
+        printf("\nLimite de Equipamentos atingido!");
+        return quantidade;
+    }
+
+    printf("Digite o código do produto: ");
+    scanf("%d", &equipamentos[quantidade].codigo);
+
+    printf("Digite o nome do produto: ");
+    scanf(" %49[^\n]", equipamentos[quantidade].nome);
+
+    printf("Digite a memória: ");
+    scanf("%d", &equipamentos[quantidade].memoria);
+
+    return quantidade + 1;
+}
+
+void listarEquipamentos(Equipamento equipamentos[], int quantidade) {
+
+    for (int i = 0; i < quantidade; i++) {
+        printf("\nEquipamento %d:\n", i + 1);
+        printf("Código: %d\n", equipamentos[i].codigo);
+        printf("Nome: %s\n", equipamentos[i].nome);
+        printf("Memória: %d\n", equipamentos[i].memoria);
+    }
+}
+
+int pesquisarEquipamento(Equipamento equipamentos[], int quantidade, int codigo) {
+
+    for (int i = 0; i < quantidade; i++) {
+        if (equipamentos[i].codigo == codigo) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int excluirEquipamento(Equipamento equipamentos[], int quantidade, int codigo) {
+
+    for (int i = 0; i < quantidade; i++) {
+
+        if (equipamentos[i].codigo == codigo) {
+
+            for (int j = i; j < quantidade - 1; j++) {
+                equipamentos[j] = equipamentos[j + 1];
+            }
+
+            return quantidade - 1;
+        }
+    }
+
+    return quantidade;
+}
+
+struct Cliente {
+    char nome[50];
+    int idade;
+    int prioridade;
+};
+
+void registrarChamado(struct Cliente *cliente) {
+
+    printf("Digite seu nome: \n");
+    scanf(" %49[^\n]", cliente->nome);
+
+    printf("Digite sua idade: \n");
+    scanf("%d", &cliente->idade);
+}
+
+void atualizarEquipamento(Equipamento equipamentos[], int quantidade) {
+
+    int atualizar;
+    int posicao;
+
+    printf("Insira o código do equipamento que deseja atualizar: ");
+    scanf("%d", &atualizar);
+
+    posicao = pesquisarEquipamento(equipamentos, quantidade, atualizar);
+
+    if (posicao == -1) {
+        printf("Equipamento não encontrado!\n");
+        return;
+    }
+
+    printf("Memória atualizada: ");
+    scanf("%d", &equipamentos[posicao].memoria);
+
+    printf("Nome atualizado: ");
+    scanf(" %49[^\n]", equipamentos[posicao].nome);
+
+    printf("Código atualizado: ");
+    scanf("%d", &equipamentos[posicao].codigo);
+}
+
+int main(void) {
+
+    setlocale(LC_ALL, "");
+
+    int menu;
+    int quantidade = 0;
+
+    Equipamento equipamentos[TOTAL];
+
+    const char *prioridade[] = {
+        "", "Normal", "Prioridade", "Urgente"
+    };
+
+    do {
+        printf("\n============================\n");
+        printf("       CENTRAL DE TI\n");
+        printf("============================\n");
+
+        printf("1 - Cadastrar equipamento\n");
+        printf("2 - Listar equipamentos\n");
+        printf("3 - Pesquisar equipamento\n");
+        printf("4 - Atualizar equipamento\n");
+        printf("5 - Excluir equipamento\n");
+        printf("6 - Ordenar equipamentos\n");
+        printf("7 - Registrar chamado\n");
+        printf("8 - Atender chamado\n");
+        printf("9 - Consultar ultimo atendimento\n");
+        printf("10 - Desfazer ultimo registro\n");
+        printf("11 - Listar fila de chamados\n");
+        printf("12 - Gerar relatorio\n");
+        printf("13 - Salvar equipamentos\n");
+        printf("0 - Sair\n");
+
+        printf("\nEscolha: ");
+
+        if (scanf("%d", &menu) != 1) {
+            printf("Valor inválido!");
+            break;
+        }
+
+        switch (menu) {
+
+            case 1:
+                quantidade = cadastroEquipamentos(equipamentos, quantidade);
+                break;
+
+            case 2:
+                listarEquipamentos(equipamentos, quantidade);
+                break;
+
+            case 3: {
+                int codigo;
+
+                printf("Digite o código: ");
+                scanf("%d", &codigo);
+
+                int posicao = pesquisarEquipamento(equipamentos, quantidade, codigo);
+
+                if (posicao != -1) {
+                    printf("Código: %d\n", equipamentos[posicao].codigo);
+                    printf("Nome: %s\n", equipamentos[posicao].nome);
+                    printf("Memória: %d\n", equipamentos[posicao].memoria);
+                } else {
+                    printf("Produto não encontrado!\n");
+                }
+
+                break;
+            }
+
+            case 4:
+                atualizarEquipamento(equipamentos, quantidade);
+                break;
+
+            case 5: {
+                int codigo;
+
+                printf("Digite o código do equipamento: ");
+                scanf("%d", &codigo);
+
+                int novaQuantidade = excluirEquipamento(equipamentos, quantidade, codigo);
+
+                if (novaQuantidade < quantidade) {
+                    quantidade = novaQuantidade;
+                    printf("Equipamento excluído!\n");
+                } else {
+                    printf("Equipamento não encontrado!\n");
+                }
+
+                break;
+            }
+
+            case 6:
+                break;
+
+            case 7: {
+                struct Cliente cliente;
+
+                printf("==================================\n");
+                printf("   Selecione sua prioridade:\n");
+                printf("==================================\n");
+                printf("1 - Normal\n");
+                printf("2 - Prioridade\n");
+                printf("3 - Urgente\n");
+                printf("==================================\n");
+
+                scanf("%d", &cliente.prioridade);
+
+                if (cliente.prioridade < 1 || cliente.prioridade > 3) {
+                    printf("Prioridade inválida!\n");
+                    break;
+                }
+
+                registrarChamado(&cliente);
+
+                printf("Chamado registrado!\n");
+                printf("Prioridade: %s\n", prioridade[cliente.prioridade]);
+
+                break;
+            }
+
+            case 8:
+                break;
+
+            case 9:
+                break;
+
+            case 10:
+                break;
+
+            case 11:
+                break;
+
+            case 12:
+                break;
+
+            case 13:
+                break;
+
+            case 0:
+                printf("Sistema encerrado!\n");
+                break;
+
+            default:
+                printf("Opcao invalida!\n");
+        }
+
+    } while (menu != 0);
+
+    return 0;
+}
